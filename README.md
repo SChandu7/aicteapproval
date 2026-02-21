@@ -1,16 +1,1615 @@
-# aicteapproval
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AICTE Approval & Compliance System</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy: #0a2240;
+  --navy-light: #133568;
+  --saffron: #FF6B00;
+  --saffron-light: #FF8C38;
+  --green-india: #138808;
+  --gold: #C8A84B;
+  --cream: #F8F5EE;
+  --white: #FFFFFF;
+  --gray-100: #F4F6F9;
+  --gray-200: #E8ECF2;
+  --gray-300: #D0D7E3;
+  --gray-500: #7A8BA3;
+  --gray-700: #3D4F6B;
+  --red-flag: #D92B3A;
+  --amber: #E8920A;
+  --success: #1A8A4A;
+  --border: #C8D0DC;
+  --shadow: 0 2px 16px rgba(10,34,64,0.12);
+  --shadow-lg: 0 8px 40px rgba(10,34,64,0.18);
+  --sidebar-w: 260px;
+}
 
-A new Flutter project.
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans', sans-serif; background: var(--gray-100); color: var(--navy); font-size: 14px; }
+h1,h2,h3,h4,h5 { font-family: 'Rajdhani', sans-serif; font-weight: 700; }
 
-## Getting Started
+/* LANDING / AUTH SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
 
-This project is a starting point for a Flutter application.
+/* === LANDING PAGE === */
+#landing {
+  min-height: 100vh;
+  background: linear-gradient(145deg, var(--navy) 0%, var(--navy-light) 60%, #1a4a8a 100%);
+  display: flex; flex-direction: column;
+}
+.emblem-header {
+  background: linear-gradient(90deg, var(--saffron) 0%, #FF8C38 50%, var(--saffron) 100%);
+  padding: 6px 24px;
+  display: flex; align-items: center; gap: 16px;
+  font-size: 11px; color: var(--white); font-weight: 600; letter-spacing: 0.5px;
+}
+.tricolor-bar { height: 5px; background: linear-gradient(90deg, var(--saffron) 33.3%, #fff 33.3% 66.6%, var(--green-india) 66.6%); }
+.landing-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.logo-section { display: flex; align-items: center; gap: 16px; }
+.emblem-circle {
+  width: 60px; height: 60px; background: var(--white); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.logo-text h1 { color: var(--white); font-size: 22px; letter-spacing: 1px; }
+.logo-text p { color: rgba(255,255,255,0.7); font-size: 11px; letter-spacing: 2px; }
+.nav-btns { display: flex; gap: 12px; }
+.btn { padding: 10px 24px; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; letter-spacing: 0.5px; transition: all 0.2s; }
+.btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.6); color: var(--white); }
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); }
+.btn-saffron { background: var(--saffron); color: var(--white); }
+.btn-saffron:hover { background: var(--saffron-light); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,107,0,0.4); }
+.btn-navy { background: var(--navy); color: var(--white); }
+.btn-navy:hover { background: var(--navy-light); }
+.btn-green { background: var(--green-india); color: var(--white); }
+.btn-green:hover { background: #1aa00e; }
+.btn-sm { padding: 7px 16px; font-size: 13px; }
+.btn-block { width: 100%; }
+.landing-hero {
+  flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column;
+  padding: 60px 48px; text-align: center;
+}
+.landing-hero h2 { color: var(--white); font-size: 48px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 16px; }
+.landing-hero h2 span { color: var(--saffron); }
+.landing-hero p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 600px; line-height: 1.7; margin-bottom: 40px; }
+.portal-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+.portal-card {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 32px 36px; text-align: center; width: 280px;
+  cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px);
+}
+.portal-card:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); border-color: var(--saffron); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.portal-card .icon { font-size: 48px; margin-bottom: 16px; }
+.portal-card h3 { color: var(--white); font-size: 20px; margin-bottom: 8px; }
+.portal-card p { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+.stats-bar {
+  background: rgba(0,0,0,0.3); padding: 20px 48px;
+  display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px;
+}
+.stat-item { text-align: center; }
+.stat-item .num { color: var(--saffron); font-family: 'Rajdhani'; font-size: 28px; font-weight: 700; }
+.stat-item .lbl { color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 1px; }
 
-A few resources to get you started if this is your first Flutter project:
+/* === AUTH MODAL / PAGE === */
+.auth-page {
+  min-height: 100vh;
+  background: linear-gradient(145deg, var(--navy) 0%, var(--navy-light) 100%);
+  display: flex; align-items: center; justify-content: center; padding: 40px 20px;
+}
+.auth-box {
+  background: var(--white); border-radius: 8px; width: 480px; overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.auth-header {
+  background: var(--navy); padding: 24px 32px;
+  display: flex; align-items: center; gap: 14px;
+}
+.auth-header .icon { font-size: 32px; }
+.auth-header h2 { color: var(--white); font-size: 18px; }
+.auth-header p { color: rgba(255,255,255,0.6); font-size: 12px; }
+.auth-body { padding: 32px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; color: var(--gray-700); margin-bottom: 6px; text-transform: uppercase; }
+.form-group input, .form-group select {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 4px;
+  font-size: 14px; font-family: 'Noto Sans'; color: var(--navy);
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--saffron); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.auth-footer { padding: 0 32px 24px; text-align: center; font-size: 13px; color: var(--gray-500); }
+.auth-footer a { color: var(--saffron); cursor: pointer; font-weight: 600; }
+.back-link { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 13px; padding: 16px 48px; }
+.back-link:hover { color: var(--white); }
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+/* === MAIN APP LAYOUT === */
+#app { display: none; min-height: 100vh; }
+#app.active { display: flex; flex-direction: column; }
+.top-bar {
+  background: var(--navy); height: 56px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  border-bottom: 3px solid var(--saffron);
+}
+.top-bar-left { display: flex; align-items: center; gap: 14px; }
+.top-logo { font-family: 'Rajdhani'; font-size: 18px; color: var(--white); font-weight: 700; letter-spacing: 1px; }
+.top-logo span { color: var(--saffron); }
+.role-badge {
+  background: var(--saffron); color: var(--white); padding: 3px 10px;
+  border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+}
+.role-badge.authority { background: var(--green-india); }
+.top-bar-right { display: flex; align-items: center; gap: 12px; }
+.top-icon { color: rgba(255,255,255,0.7); cursor: pointer; font-size: 18px; padding: 6px; border-radius: 4px; transition: all 0.2s; }
+.top-icon:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+.user-pill { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--saffron); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--white); font-size: 13px; }
+.user-name { color: rgba(255,255,255,0.85); font-size: 13px; }
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+.app-body { display: flex; padding-top: 56px; }
+.sidebar {
+  width: var(--sidebar-w); background: var(--white); position: fixed; top: 56px; left: 0;
+  bottom: 0; overflow-y: auto; border-right: 1px solid var(--border); z-index: 90;
+}
+.sidebar-section { padding: 16px 0; border-bottom: 1px solid var(--gray-200); }
+.sidebar-section-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-500); padding: 0 20px 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer;
+  font-size: 14px; color: var(--gray-700); font-weight: 500; transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { background: var(--gray-100); color: var(--navy); }
+.nav-item.active { background: #FFF5EE; color: var(--saffron); border-left-color: var(--saffron); font-weight: 600; }
+.nav-item .ni { font-size: 18px; width: 22px; text-align: center; }
+.nav-badge { margin-left: auto; background: var(--red-flag); color: var(--white); font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
+
+.main-content { margin-left: var(--sidebar-w); flex: 1; padding: 24px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* PAGE HEADERS */
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 26px; color: var(--navy); }
+.page-header p { color: var(--gray-500); font-size: 13px; margin-top: 4px; }
+.breadcrumb { font-size: 12px; color: var(--gray-500); margin-bottom: 8px; }
+.breadcrumb span { color: var(--saffron); }
+
+/* CARDS */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--white); border-radius: 6px; padding: 20px 24px;
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+}
+.stat-card.blue::before { background: var(--navy); }
+.stat-card.orange::before { background: var(--saffron); }
+.stat-card.green::before { background: var(--green-india); }
+.stat-card.red::before { background: var(--red-flag); }
+.stat-card.gold::before { background: var(--gold); }
+.stat-card.amber::before { background: var(--amber); }
+.stat-card .sc-label { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+.stat-card .sc-value { font-family: 'Rajdhani'; font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1; }
+.stat-card .sc-sub { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.stat-card .sc-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 36px; opacity: 0.1; }
+
+/* SECTION CARD */
+.card { background: var(--white); border-radius: 6px; border: 1px solid var(--border); margin-bottom: 20px; }
+.card-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-header h3 { font-size: 16px; color: var(--navy); }
+.card-body { padding: 24px; }
+.card-body-sm { padding: 16px 24px; }
+
+/* TABLE */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { background: var(--gray-100); text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gray-700); border-bottom: 2px solid var(--border); }
+.data-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); font-size: 13px; vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--gray-100); }
+
+/* BADGES */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+.badge-approved { background: #D4EDDA; color: #155724; }
+.badge-pending { background: #FFF3CD; color: #856404; }
+.badge-rejected { background: #F8D7DA; color: #721C24; }
+.badge-flagged { background: #F8D7DA; color: #721C24; }
+.badge-low { background: #D4EDDA; color: #155724; }
+.badge-medium { background: #FFF3CD; color: #856404; }
+.badge-high { background: #F8D7DA; color: #721C24; }
+.badge-review { background: #E0ECFF; color: #0A3D9E; }
+
+/* RISK SCORE */
+.risk-meter { display: flex; align-items: center; gap: 12px; }
+.risk-bar-wrap { flex: 1; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+.risk-bar { height: 100%; border-radius: 4px; }
+.risk-low { background: var(--green-india); }
+.risk-medium { background: var(--amber); }
+.risk-high { background: var(--red-flag); }
+
+/* CHARTS GRID */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.chart-container { position: relative; height: 240px; }
+
+/* NOTIFICATIONS */
+.notif-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--gray-200); }
+.notif-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.notif-icon.warning { background: #FFF3CD; }
+.notif-icon.success { background: #D4EDDA; }
+.notif-icon.danger { background: #F8D7DA; }
+.notif-icon.info { background: #E0ECFF; }
+.notif-title { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 3px; }
+.notif-desc { font-size: 12px; color: var(--gray-500); }
+.notif-time { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+/* UPLOAD DOCS */
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.doc-card {
+  border: 1.5px dashed var(--border); border-radius: 6px; padding: 16px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+}
+.doc-card:hover { border-color: var(--saffron); background: #FFF5EE; }
+.doc-card.uploaded { border-style: solid; border-color: var(--green-india); background: #F0FFF4; }
+.doc-card.expired { border-color: var(--red-flag); background: #FFF0F0; }
+.doc-card .doc-icon { font-size: 32px; margin-bottom: 8px; }
+.doc-card .doc-name { font-size: 12px; font-weight: 600; color: var(--navy); }
+.doc-card .doc-status { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+/* FORMS */
+.section-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.section-form.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.section-form .full { grid-column: 1 / -1; }
+
+/* PROFILE */
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.info-item { margin-bottom: 14px; }
+.info-item .info-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 4px; }
+.info-item .info-val { font-size: 14px; color: var(--navy); font-weight: 500; }
+
+/* AI RISK PAGE */
+.ai-overview { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+.risk-circle { text-align: center; padding: 32px; }
+.risk-donut { width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; position: relative; }
+.risk-score-big { font-family: 'Rajdhani'; font-size: 52px; font-weight: 700; }
+.action-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-200); }
+.action-item:last-child { border-bottom: none; }
+.action-bullet { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+
+/* APPROVAL HISTORY TABLE */
+.timeline { position: relative; }
+.timeline-item { display: flex; gap: 16px; margin-bottom: 16px; position: relative; }
+.timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--saffron); flex-shrink: 0; margin-top: 3px; border: 2px solid var(--white); box-shadow: 0 0 0 2px var(--saffron); }
+.timeline-dot.green { background: var(--green-india); box-shadow: 0 0 0 2px var(--green-india); }
+.timeline-dot.red { background: var(--red-flag); box-shadow: 0 0 0 2px var(--red-flag); }
+.timeline-content { flex: 1; }
+.timeline-title { font-weight: 600; font-size: 13px; }
+.timeline-desc { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
+
+/* AUTH TABS */
+.auth-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.auth-tab { flex: 1; text-align: center; padding: 12px; font-family: 'Rajdhani'; font-weight: 700; font-size: 14px; cursor: pointer; color: var(--gray-500); border-bottom: 2px solid transparent; transition: all 0.2s; }
+.auth-tab.active { color: var(--saffron); border-bottom-color: var(--saffron); }
+
+/* SEARCH & FILTER BAR */
+.filter-bar { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.search-box { flex: 1; min-width: 200px; }
+.search-box input { width: 100%; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 4px; font-size: 13px; font-family: 'Noto Sans'; }
+.search-box input:focus { outline: none; border-color: var(--saffron); }
+.filter-select select { padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 4px; font-size: 13px; font-family: 'Noto Sans'; color: var(--navy); }
+
+/* DEFICIENCY */
+.deficiency-card { background: #FFF5F5; border: 1px solid #FFCCCC; border-radius: 6px; padding: 16px; margin-bottom: 12px; }
+.deficiency-card h4 { color: var(--red-flag); font-size: 14px; }
+.deficiency-card p { font-size: 12px; color: var(--gray-700); margin-top: 6px; }
+
+/* GOV FOOTER */
+.gov-footer { background: var(--navy); color: rgba(255,255,255,0.6); padding: 12px 24px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
+.gov-footer a { color: var(--saffron); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-100); }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 8px; width: 520px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 18px; }
+.modal-close { cursor: pointer; font-size: 20px; color: var(--gray-500); }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; }
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .main-content { margin-left: 0; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .ai-overview { grid-template-columns: 1fr; }
+}
+
+/* PROGRAM PAGE */
+.program-card { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.program-icon { width: 44px; height: 44px; border-radius: 8px; background: #EEF3FF; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.program-info { flex: 1; }
+.program-name { font-weight: 700; font-size: 15px; font-family: 'Rajdhani'; }
+.program-meta { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
+.program-actions { display: flex; gap: 8px; }
+
+/* HEATMAP FAKE */
+.heatmap { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.hm-cell { height: 32px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--white); font-weight: 600; }
+
+/* COMPLIANCE SCORE */
+.compliance-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.compliance-row .cr-label { width: 180px; font-size: 13px; font-weight: 500; }
+.compliance-row .cr-bar { flex: 1; height: 10px; background: var(--gray-200); border-radius: 5px; overflow: hidden; }
+.compliance-row .cr-fill { height: 100%; border-radius: 5px; }
+.compliance-row .cr-val { width: 40px; text-align: right; font-size: 12px; font-weight: 700; color: var(--navy); }
+
+.alert-banner { padding: 12px 16px; border-radius: 4px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 16px; font-size: 13px; }
+.alert-banner.warn { background: #FFF3CD; border-left: 4px solid var(--amber); color: #7d5a00; }
+.alert-banner.info { background: #E0ECFF; border-left: 4px solid #1A5EBF; color: #0A3D9E; }
+.alert-banner.danger { background: #F8D7DA; border-left: 4px solid var(--red-flag); color: #721c24; }
+</style>
+</head>
+<body>
+
+<!-- ===================== LANDING ===================== -->
+<div id="landing" class="screen active">
+  <div class="tricolor-bar"></div>
+  <div class="emblem-header">
+    <span>🇮🇳</span>
+    <span>GOVERNMENT OF INDIA — MINISTRY OF EDUCATION</span>
+    <span style="margin-left:auto;">Screen Reader Access | हिन्दी | Help</span>
+  </div>
+  <div class="landing-nav">
+    <div class="logo-section">
+      <div class="emblem-circle">⚖️</div>
+      <div class="logo-text">
+        <h1>AICTE PORTAL</h1>
+        <p>ALL INDIA COUNCIL FOR TECHNICAL EDUCATION</p>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-outline" onclick="showPage('login')">Sign In</button>
+      <button class="btn btn-saffron" onclick="showPage('register')">Register Institution</button>
+    </div>
+  </div>
+  <div class="landing-hero">
+    <h2>AICTE <span>Approval</span> &<br>Compliance System</h2>
+    <p>A unified digital platform for technical institution approvals, mandatory disclosures, AI-powered compliance monitoring, and authority review — ensuring transparency in higher education.</p>
+    <div class="portal-cards">
+      <div class="portal-card" onclick="loginAs('institution')">
+        <div class="icon">🏛️</div>
+        <h3>Institution Portal</h3>
+        <p>Apply for approvals, upload mandatory documents, track compliance status, and view AI risk assessments for your institution.</p>
+        <button class="btn btn-saffron btn-block">Login as Institution</button>
+      </div>
+      <div class="portal-card" onclick="loginAs('authority')">
+        <div class="icon">🔍</div>
+        <h3>Authority Portal</h3>
+        <p>Review institution applications, evaluate AI compliance flags, manage deficiency notices, and generate regional reports.</p>
+        <button class="btn btn-green btn-block">Login as Authority</button>
+      </div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><div class="num">11,200+</div><div class="lbl">Approved Institutions</div></div>
+    <div class="stat-item"><div class="num">38</div><div class="lbl">States & UTs Covered</div></div>
+    <div class="stat-item"><div class="num">2.4L+</div><div class="lbl">Applications Processed</div></div>
+    <div class="stat-item"><div class="num">98.2%</div><div class="lbl">Digital Compliance Rate</div></div>
+    <div class="stat-item"><div class="num">847</div><div class="lbl">AI Risk Flags Resolved</div></div>
+  </div>
+</div>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login" class="screen">
+  <div class="auth-page">
+    <div style="width:480px">
+      <div class="back-link" onclick="showPage('landing')">← Back to Portal Home</div>
+      <div class="auth-box">
+        <div class="auth-header">
+          <div class="icon">🔐</div>
+          <div>
+            <h2>Institution Login</h2>
+            <p>AICTE Approval & Compliance System</p>
+          </div>
+        </div>
+        <div style="padding:0 32px 8px">
+          <div class="auth-tabs">
+            <div class="auth-tab active">Institution</div>
+            <div class="auth-tab" onclick="loginAs('authority')">Authority</div>
+          </div>
+        </div>
+        <div class="auth-body">
+          <div class="alert-banner info">🛈 Demo credentials: Use any email and password to enter the Institution dashboard.</div>
+          <div class="form-group">
+            <label>Registered Email ID</label>
+            <input type="email" placeholder="principal@institution.ac.in" value="principal@nmit.ac.in">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Enter your password" value="••••••••">
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><a style="font-size:12px;color:var(--saffron);cursor:pointer">Forgot Password?</a></div>
+          <button class="btn btn-saffron btn-block" onclick="enterApp('institution')">LOGIN →</button>
+        </div>
+        <div class="auth-footer">
+          New Institution? <a onclick="showPage('register')">Register Here</a> &nbsp;|&nbsp; Need Help? <a>1800-XXX-XXXX</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== REGISTER ===================== -->
+<div id="register" class="screen">
+  <div class="auth-page">
+    <div style="width:620px">
+      <div class="back-link" onclick="showPage('landing')">← Back to Portal Home</div>
+      <div class="auth-box" style="width:100%">
+        <div class="auth-header">
+          <div class="icon">🏛️</div>
+          <div>
+            <h2>Institution Registration</h2>
+            <p>Register your institution on AICTE Portal</p>
+          </div>
+        </div>
+        <div class="auth-body">
+          <div class="alert-banner info">Fill all mandatory fields. Your AICTE Institution ID will be verified automatically.</div>
+          <div class="form-row">
+            <div class="form-group"><label>Institution Name *</label><input placeholder="e.g. National Model Institute of Technology"></div>
+            <div class="form-group"><label>AICTE Institute ID</label><input placeholder="e.g. 1-123456789"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Institution Type *</label>
+              <select><option>Engineering</option><option>Pharmacy</option><option>MBA/Management</option><option>Architecture</option><option>MCA</option></select>
+            </div>
+            <div class="form-group"><label>Institution Category *</label>
+              <select><option>Affiliated</option><option>Autonomous</option><option>Deemed University</option><option>University</option></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Year of Establishment *</label><input type="number" placeholder="e.g. 1998"></div>
+            <div class="form-group"><label>Affiliated University *</label><input placeholder="e.g. Visvesvaraya Tech. University"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>State *</label>
+              <select><option>Karnataka</option><option>Maharashtra</option><option>Tamil Nadu</option><option>Andhra Pradesh</option><option>Telangana</option><option>Gujarat</option></select>
+            </div>
+            <div class="form-group"><label>District *</label><input placeholder="Enter district"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Pincode *</label><input placeholder="560001"></div>
+            <div class="form-group"><label>Principal Name *</label><input placeholder="Dr. Full Name"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Contact Email *</label><input type="email" placeholder="principal@institution.ac.in"></div>
+            <div class="form-group"><label>Mobile Number *</label><input placeholder="+91 XXXXXXXXXX"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Password *</label><input type="password" placeholder="Minimum 8 characters"></div>
+            <div class="form-group"><label>Confirm Password *</label><input type="password" placeholder="Re-enter password"></div>
+          </div>
+          <button class="btn btn-saffron btn-block" style="margin-top:8px" onclick="enterApp('institution')">SUBMIT REGISTRATION →</button>
+        </div>
+        <div class="auth-footer">Already registered? <a onclick="showPage('login')">Login Here</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== AUTH LOGIN (Authority) ===================== -->
+<div id="auth-login" class="screen">
+  <div class="auth-page">
+    <div style="width:480px">
+      <div class="back-link" onclick="showPage('landing')">← Back to Portal Home</div>
+      <div class="auth-box">
+        <div class="auth-header">
+          <div class="icon">🔍</div>
+          <div>
+            <h2>Authority Login</h2>
+            <p>AICTE Regional Review System</p>
+          </div>
+        </div>
+        <div style="padding:0 32px 8px">
+          <div class="auth-tabs">
+            <div class="auth-tab" onclick="showPage('login')">Institution</div>
+            <div class="auth-tab active">Authority</div>
+          </div>
+        </div>
+        <div class="auth-body">
+          <div class="alert-banner info">🛈 Demo: Any credentials will log you into the Authority dashboard.</div>
+          <div class="form-group"><label>Official Email ID</label><input type="email" placeholder="reviewer@aicte-india.org" value="rajeshkumar@aicte-india.org"></div>
+          <div class="form-group"><label>Password</label><input type="password" value="••••••••"></div>
+          <button class="btn btn-green btn-block" onclick="enterApp('authority')">LOGIN →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="top-logo">⚖️ AICTE <span>PORTAL</span></div>
+      <div class="role-badge" id="roleBadge">INSTITUTION</div>
+    </div>
+    <div class="top-bar-right">
+      <div class="top-icon" title="Notifications" onclick="navTo('notifications')">🔔</div>
+      <div class="top-icon" title="Help">❓</div>
+      <div class="user-pill" id="userPill">
+        <div class="user-avatar" id="userAvatarTop">NM</div>
+        <div class="user-name" id="userNameTop">NMIT Bengaluru</div>
+      </div>
+      <div class="top-icon" onclick="logout()" title="Logout">🚪</div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <!-- Institution Sidebar -->
+    <div class="sidebar" id="inst-sidebar">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px">Logged in as</div>
+        <div style="font-weight:700;color:var(--navy);font-size:14px">NMIT, Bengaluru</div>
+        <div style="font-size:12px;color:var(--gray-500)">AICTE ID: 1-4721839540</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Main Menu</div>
+        <div class="nav-item active" onclick="navTo('inst-dashboard')"><span class="ni">📊</span> Dashboard</div>
+        <div class="nav-item" onclick="navTo('programs')"><span class="ni">📚</span> Programs <span class="nav-badge">2</span></div>
+        <div class="nav-item" onclick="navTo('upload-docs')"><span class="ni">📁</span> Upload Documents</div>
+        <div class="nav-item" onclick="navTo('about-inst')"><span class="ni">🏛️</span> About Institution</div>
+        <div class="nav-item" onclick="navTo('analytics')"><span class="ni">📈</span> Analytics</div>
+        <div class="nav-item" onclick="navTo('ai-risk')"><span class="ni">🤖</span> AI Risk & Compliance</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Account</div>
+        <div class="nav-item" onclick="navTo('notifications')"><span class="ni">🔔</span> Notifications <span class="nav-badge">3</span></div>
+        <div class="nav-item" onclick="navTo('settings')"><span class="ni">⚙️</span> Settings</div>
+      </div>
+      <div style="padding:16px 20px;margin-top:8px">
+        <div style="background:#FFF5EE;border:1px solid #FFD7B5;border-radius:6px;padding:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--saffron);margin-bottom:4px">⚡ AI Risk Score</div>
+          <div style="font-family:'Rajdhani';font-size:28px;font-weight:700;color:var(--amber)">64 / 100</div>
+          <div style="font-size:11px;color:var(--gray-500)">Medium Risk — Action needed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authority Sidebar -->
+    <div class="sidebar" id="auth-sidebar" style="display:none">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px">Reviewer</div>
+        <div style="font-weight:700;color:var(--navy);font-size:14px">Rajesh Kumar IAS</div>
+        <div style="font-size:12px;color:var(--gray-500)">Senior Reviewer — South Zone</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Authority Menu</div>
+        <div class="nav-item active" onclick="navTo('auth-dashboard')"><span class="ni">📊</span> Dashboard</div>
+        <div class="nav-item" onclick="navTo('inst-review')"><span class="ni">🔍</span> Institution Review <span class="nav-badge">12</span></div>
+        <div class="nav-item" onclick="navTo('auth-ai-risk')"><span class="ni">🤖</span> AI Risk Analysis</div>
+        <div class="nav-item" onclick="navTo('deficiency')"><span class="ni">⚠️</span> Deficiency Management</div>
+        <div class="nav-item" onclick="navTo('auth-analytics')"><span class="ni">📈</span> Analytics & Monitoring</div>
+        <div class="nav-item" onclick="navTo('audit')"><span class="ni">📋</span> Audit & History</div>
+        <div class="nav-item" onclick="navTo('reports')"><span class="ni">📄</span> Reports & Export</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="nav-item" onclick="navTo('auth-notifications')"><span class="ni">🔔</span> Notifications <span class="nav-badge">5</span></div>
+      </div>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-content">
+
+      <!-- ======= INSTITUTION DASHBOARD ======= -->
+      <div class="page active" id="page-inst-dashboard">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard</div>
+          <h2>Institution Dashboard</h2>
+          <p>National Model Institute of Technology, Bengaluru — AY 2024-25</p>
+        </div>
+
+        <div class="alert-banner warn">⚠️ 2 programs have pending AI flag warnings. Faculty-to-student ratio for CSE is below AICTE norms. Please review and resubmit.</div>
+
+        <div class="stats-grid">
+          <div class="stat-card blue"><div class="sc-label">Total Programs Applied</div><div class="sc-value">8</div><div class="sc-sub">AY 2024-25</div><div class="sc-icon">📚</div></div>
+          <div class="stat-card green"><div class="sc-label">Approved Programs</div><div class="sc-value">5</div><div class="sc-sub">Fully compliant</div><div class="sc-icon">✅</div></div>
+          <div class="stat-card amber"><div class="sc-label">Pending Review</div><div class="sc-value">2</div><div class="sc-sub">Under scrutiny</div><div class="sc-icon">⏳</div></div>
+          <div class="stat-card red"><div class="sc-label">Rejected</div><div class="sc-value">1</div><div class="sc-sub">Deficiency noted</div><div class="sc-icon">❌</div></div>
+          <div class="stat-card gold"><div class="sc-label">AI Compliance Score</div><div class="sc-value">64</div><div class="sc-sub">Medium Risk</div><div class="sc-icon">🤖</div></div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="card">
+            <div class="card-header"><h3>Year-wise Approval Trend</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="approvalTrendChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Program Status Distribution</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="programStatusChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Faculty vs Required Faculty</h3><span class="badge badge-flagged">Below Norm</span></div>
+            <div class="card-body"><div class="chart-container"><canvas id="facultyChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Intake vs Infrastructure Ratio</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="intakeChart"></canvas></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Recent Activity</h3></div>
+          <div class="card-body-sm">
+            <table class="data-table">
+              <thead><tr><th>Activity</th><th>Program</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Document Resubmission</td><td>M.Tech (VLSI)</td><td>15 Jan 2025</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>Approval Received</td><td>B.E. (CSE)</td><td>10 Jan 2025</td><td><span class="badge badge-approved">Approved</span></td></tr>
+                <tr><td>AI Flag Raised</td><td>MBA Program</td><td>05 Jan 2025</td><td><span class="badge badge-flagged">Flagged</span></td></tr>
+                <tr><td>Deficiency Letter Received</td><td>B.Pharm</td><td>28 Dec 2024</td><td><span class="badge badge-rejected">Deficiency</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= PROGRAMS ======= -->
+      <div class="page" id="page-programs">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>Programs</span></div>
+          <h2>Programs</h2>
+          <p>Manage all academic programs applied / approved under AICTE norms</p>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box"><input placeholder="🔍 Search programs..."></div>
+          <div class="filter-select"><select><option>All Status</option><option>Approved</option><option>Pending</option><option>Rejected</option></select></div>
+          <button class="btn btn-saffron btn-sm" onclick="openModal('addProgram')">+ Add New Program</button>
+        </div>
+
+        <div id="programs-list">
+          <!-- Program cards generated by JS -->
+        </div>
+      </div>
+
+      <!-- ======= UPLOAD DOCUMENTS ======= -->
+      <div class="page" id="page-upload-docs">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>Upload Documents</span></div>
+          <h2>Upload Documents</h2>
+          <p>Upload all mandatory documents required for AICTE approval. AI pre-validation will auto-check for compliance.</p>
+        </div>
+        <div class="alert-banner danger">🔴 3 documents are missing or expired. Incomplete submissions may result in rejection.</div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h3>AI Pre-Validation Status</h3><span class="badge badge-medium">Issues Found</span></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+              <div style="background:#D4EDDA;border-radius:6px;padding:12px;text-align:center"><div>✅</div><div style="font-size:12px;font-weight:600;margin-top:4px">Document Count</div><div style="font-size:11px;color:#155724">6/9 Uploaded</div></div>
+              <div style="background:#F8D7DA;border-radius:6px;padding:12px;text-align:center"><div>❌</div><div style="font-size:12px;font-weight:600;margin-top:4px">Faculty Count</div><div style="font-size:11px;color:#721C24">Below Minimum</div></div>
+              <div style="background:#FFF3CD;border-radius:6px;padding:12px;text-align:center"><div>⚠️</div><div style="font-size:12px;font-weight:600;margin-top:4px">Infrastructure</div><div style="font-size:11px;color:#856404">Partial Match</div></div>
+              <div style="background:#F8D7DA;border-radius:6px;padding:12px;text-align:center"><div>❌</div><div style="font-size:12px;font-weight:600;margin-top:4px">Certificate Expiry</div><div style="font-size:11px;color:#721C24">Fire Safety Expired</div></div>
+              <div style="background:#D4EDDA;border-radius:6px;padding:12px;text-align:center"><div>✅</div><div style="font-size:12px;font-weight:600;margin-top:4px">Duplicate Faculty</div><div style="font-size:11px;color:#155724">None Detected</div></div>
+              <div style="background:#D4EDDA;border-radius:6px;padding:12px;text-align:center"><div>✅</div><div style="font-size:12px;font-weight:600;margin-top:4px">Faculty Drop</div><div style="font-size:11px;color:#155724">No Sudden Drop</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="doc-grid" id="doc-grid"></div>
+      </div>
+
+      <!-- ======= ABOUT INSTITUTION ======= -->
+      <div class="page" id="page-about-inst">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>About Institution</span></div>
+          <h2>About Institution</h2>
+          <p>Institution profile and official details as registered with AICTE</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <div class="card-header"><h3>Institution Profile</h3></div>
+            <div class="card-body">
+              <div style="text-align:center;margin-bottom:20px">
+                <div style="width:80px;height:80px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px">🏛️</div>
+                <div style="font-family:'Rajdhani';font-size:20px;font-weight:700">National Model Institute of Technology</div>
+                <div style="font-size:12px;color:var(--gray-500)">Bengaluru, Karnataka</div>
+              </div>
+              <div class="info-item"><div class="info-label">AICTE Institute ID</div><div class="info-val">1-4721839540</div></div>
+              <div class="info-item"><div class="info-label">Type</div><div class="info-val">Engineering / Technology</div></div>
+              <div class="info-item"><div class="info-label">Category</div><div class="info-val">Autonomous</div></div>
+              <div class="info-item"><div class="info-label">Year of Establishment</div><div class="info-val">1998</div></div>
+              <div class="info-item"><div class="info-label">Affiliated University</div><div class="info-val">Visvesvaraya Technological University (VTU)</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Contact & Administration</h3></div>
+            <div class="card-body">
+              <div class="info-item"><div class="info-label">Principal / Director</div><div class="info-val">Dr. Sunanda Rajan, Ph.D (IISc)</div></div>
+              <div class="info-item"><div class="info-label">Contact Email</div><div class="info-val">principal@nmit.ac.in</div></div>
+              <div class="info-item"><div class="info-label">Mobile</div><div class="info-val">+91-80-23604020</div></div>
+              <div class="info-item"><div class="info-label">Address</div><div class="info-val">Yelahanka, Bengaluru – 560064, Karnataka</div></div>
+              <div class="info-item"><div class="info-label">Governing Body</div><div class="info-val">NMIT Educational Trust (Reg. No. TR/BNG/2498)</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Accreditation Details</h3></div>
+            <div class="card-body">
+              <div class="info-item"><div class="info-label">NAAC Grade</div><div class="info-val">A+ (3.62 CGPA) — Valid till 2026</div></div>
+              <div class="info-item"><div class="info-label">NBA Accredited Programs</div><div class="info-val">CSE, ECE, ME, CV (2023-26)</div></div>
+              <div class="info-item"><div class="info-label">ISO Certification</div><div class="info-val">ISO 9001:2015 Certified</div></div>
+              <div class="info-item"><div class="info-label">Last AICTE Inspection</div><div class="info-val">14 September 2024</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Approval History</h3></div>
+            <div class="card-body">
+              <div class="timeline">
+                <div class="timeline-item"><div class="timeline-dot green"></div><div class="timeline-content"><div class="timeline-title">B.E. CSE — Approved (Intake: 120)</div><div class="timeline-desc">2024-25 · AICTE Approval Letter No. F.No-South-West/1-4721839540/2024</div></div></div>
+                <div class="timeline-item"><div class="timeline-dot green"></div><div class="timeline-content"><div class="timeline-title">M.Tech VLSI — Approved (Intake: 18)</div><div class="timeline-desc">2024-25 · Conditional approval with faculty remarks</div></div></div>
+                <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-title">MBA Program — Under Review</div><div class="timeline-desc">2024-25 · Awaiting faculty document resubmission</div></div></div>
+                <div class="timeline-item"><div class="timeline-dot red"></div><div class="timeline-content"><div class="timeline-title">B.Pharm — Deficiency Raised</div><div class="timeline-desc">2023-24 · Lab equipment and fire safety doc pending</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= ANALYTICS ======= -->
+      <div class="page" id="page-analytics">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>Analytics</span></div>
+          <h2>Analytics</h2>
+          <p>Institutional performance analytics and compliance benchmarks</p>
+        </div>
+        <div class="charts-grid">
+          <div class="card">
+            <div class="card-header"><h3>Compliance Score Trend (Year-wise)</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="compTrendChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Faculty Strength Analysis</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="facultyStrengthChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Infrastructure Utilization (%)</h3></div>
+            <div class="card-body">
+              <div class="compliance-row"><div class="cr-label">Laboratories</div><div class="cr-bar"><div class="cr-fill" style="width:92%;background:var(--green-india)"></div></div><div class="cr-val">92%</div></div>
+              <div class="compliance-row"><div class="cr-label">Classrooms</div><div class="cr-bar"><div class="cr-fill" style="width:78%;background:var(--amber)"></div></div><div class="cr-val">78%</div></div>
+              <div class="compliance-row"><div class="cr-label">Library</div><div class="cr-bar"><div class="cr-fill" style="width:85%;background:var(--navy)"></div></div><div class="cr-val">85%</div></div>
+              <div class="compliance-row"><div class="cr-label">Computer Centre</div><div class="cr-bar"><div class="cr-fill" style="width:64%;background:var(--amber)"></div></div><div class="cr-val">64%</div></div>
+              <div class="compliance-row"><div class="cr-label">Seminar Halls</div><div class="cr-bar"><div class="cr-fill" style="width:55%;background:var(--saffron)"></div></div><div class="cr-val">55%</div></div>
+              <div class="compliance-row"><div class="cr-label">Research Labs</div><div class="cr-bar"><div class="cr-fill" style="width:40%;background:var(--red-flag)"></div></div><div class="cr-val">40%</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Approval Success Rate</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="successRateChart"></canvas></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Benchmark Comparison — Karnataka State Average</h3></div>
+          <div class="card-body"><div class="chart-container" style="height:200px"><canvas id="benchmarkChart"></canvas></div></div>
+        </div>
+      </div>
+
+      <!-- ======= AI RISK & COMPLIANCE (Institution) ======= -->
+      <div class="page" id="page-ai-risk">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>AI Risk & Compliance</span></div>
+          <h2>AI Risk & Compliance</h2>
+          <p>AI-powered compliance analysis and predictive approval probability</p>
+        </div>
+        <div class="ai-overview">
+          <div class="card">
+            <div class="card-header"><h3>Risk Score</h3></div>
+            <div class="card-body" style="text-align:center">
+              <div style="position:relative;width:160px;height:160px;margin:0 auto 16px">
+                <canvas id="riskGauge"></canvas>
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+                  <div style="font-family:'Rajdhani';font-size:40px;font-weight:700;color:var(--amber)">64</div>
+                  <div style="font-size:11px;color:var(--gray-500)">/ 100</div>
+                </div>
+              </div>
+              <div class="badge badge-medium" style="font-size:14px;padding:6px 16px">⚠️ MEDIUM RISK</div>
+              <div style="margin-top:16px;font-size:12px;color:var(--gray-500)">Updated: 20 Jan 2025 at 11:42 AM</div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div class="card-header"><h3>Risk Breakdown by Category</h3></div>
+              <div class="card-body">
+                <div class="compliance-row"><div class="cr-label">Faculty Compliance</div><div class="cr-bar"><div class="cr-fill" style="width:58%;background:var(--amber)"></div></div><div class="cr-val">58%</div></div>
+                <div class="compliance-row"><div class="cr-label">Infrastructure</div><div class="cr-bar"><div class="cr-fill" style="width:72%;background:var(--green-india)"></div></div><div class="cr-val">72%</div></div>
+                <div class="compliance-row"><div class="cr-label">Document Completeness</div><div class="cr-bar"><div class="cr-fill" style="width:67%;background:var(--amber)"></div></div><div class="cr-val">67%</div></div>
+                <div class="compliance-row"><div class="cr-label">Financial Adequacy</div><div class="cr-bar"><div class="cr-fill" style="width:80%;background:var(--green-india)"></div></div><div class="cr-val">80%</div></div>
+                <div class="compliance-row"><div class="cr-label">Certificate Validity</div><div class="cr-bar"><div class="cr-fill" style="width:45%;background:var(--red-flag)"></div></div><div class="cr-val">45%</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3>Suggested Actions</h3></div>
+              <div class="card-body">
+                <div class="action-item"><div class="action-bullet" style="background:var(--red-flag)"></div><div><div style="font-size:13px;font-weight:600">Renew Fire Safety Certificate</div><div style="font-size:12px;color:var(--gray-500)">Expired on 01 Nov 2024 — Critical, deadline in 15 days</div></div></div>
+                <div class="action-item"><div class="action-bullet" style="background:var(--amber)"></div><div><div style="font-size:13px;font-weight:600">Appoint 4 Additional Faculty (CSE)</div><div style="font-size:12px;color:var(--gray-500)">Current ratio 1:18 vs AICTE norm of 1:15</div></div></div>
+                <div class="action-item"><div class="action-bullet" style="background:var(--amber)"></div><div><div style="font-size:13px;font-weight:600">Submit Infrastructure Report for MBA Wing</div><div style="font-size:12px;color:var(--gray-500)">Lab adequacy check failed during AI scan</div></div></div>
+                <div class="action-item"><div class="action-bullet" style="background:var(--navy)"></div><div><div style="font-size:13px;font-weight:600">Update Affidavit for AY 2025-26</div><div style="font-size:12px;color:var(--gray-500)">Affidavit stamp is more than 6 months old</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Predictive Approval Probability — AY 2025-26</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px">
+              <div style="border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center"><div style="font-family:'Rajdhani';font-size:30px;font-weight:700;color:var(--green-india)">82%</div><div style="font-size:13px;font-weight:600">B.E. CSE</div><div class="badge badge-approved" style="margin-top:6px">High Chance</div></div>
+              <div style="border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center"><div style="font-family:'Rajdhani';font-size:30px;font-weight:700;color:var(--green-india)">78%</div><div style="font-size:13px;font-weight:600">B.E. ECE</div><div class="badge badge-approved" style="margin-top:6px">High Chance</div></div>
+              <div style="border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center"><div style="font-family:'Rajdhani';font-size:30px;font-weight:700;color:var(--amber)">58%</div><div style="font-size:13px;font-weight:600">MBA Program</div><div class="badge badge-medium" style="margin-top:6px">Moderate Risk</div></div>
+              <div style="border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center"><div style="font-family:'Rajdhani';font-size:30px;font-weight:700;color:var(--red-flag)">34%</div><div style="font-size:13px;font-weight:600">B.Pharm</div><div class="badge badge-high" style="margin-top:6px">High Risk</div></div>
+              <div style="border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center"><div style="font-family:'Rajdhani';font-size:30px;font-weight:700;color:var(--green-india)">88%</div><div style="font-size:13px;font-weight:600">M.Tech CS</div><div class="badge badge-approved" style="margin-top:6px">High Chance</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= NOTIFICATIONS ======= -->
+      <div class="page" id="page-notifications">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>Notifications</span></div>
+          <h2>Notifications</h2>
+          <p>All alerts, updates and communications from AICTE</p>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Recent Notifications</h3><span class="badge badge-flagged">3 Unread</span></div>
+          <div class="card-body">
+            <div class="notif-item"><div class="notif-icon danger">⚠️</div><div><div class="notif-title">AI Flag: Faculty-Student Ratio Below Norm — CSE</div><div class="notif-desc">Your CSE department has 16 faculty for 288 students (1:18). AICTE norm requires minimum 1:15. Please submit updated faculty list within 30 days.</div><div class="notif-time">📅 20 Jan 2025, 10:30 AM</div></div></div>
+            <div class="notif-item"><div class="notif-icon warning">📋</div><div><div class="notif-title">Deficiency Letter Received — B.Pharm Program</div><div class="notif-desc">A deficiency letter has been issued for your B.Pharm program. Missing: Fire Safety Certificate, Lab Equipment List. Deadline: 15 Feb 2025.</div><div class="notif-time">📅 18 Jan 2025, 02:15 PM</div></div></div>
+            <div class="notif-item"><div class="notif-icon danger">🔴</div><div><div class="notif-title">Document Expiry Alert — Fire Safety Certificate</div><div class="notif-desc">Your Fire Safety Certificate (No. KA/FSC/2022/4821) expired on 01 Nov 2024. Immediate renewal required to avoid rejection.</div><div class="notif-time">📅 15 Jan 2025, 09:00 AM</div></div></div>
+            <div class="notif-item"><div class="notif-icon success">✅</div><div><div class="notif-title">Approval Update — B.E. CSE (Intake: 120)</div><div class="notif-desc">Your application for B.E. CSE with intake of 120 has been approved for AY 2024-25. Download approval letter from Documents section.</div><div class="notif-time">📅 10 Jan 2025, 04:00 PM</div></div></div>
+            <div class="notif-item"><div class="notif-icon info">📢</div><div><div class="notif-title">Regulation Update — AICTE Norms 2025</div><div class="notif-desc">AICTE has updated faculty qualification norms for FY 2025-26. All institutions must re-verify faculty credentials. New guidelines effective 1 April 2025.</div><div class="notif-time">📅 05 Jan 2025, 11:00 AM</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= SETTINGS ======= -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <div class="breadcrumb">Dashboard → <span>Settings</span></div>
+          <h2>Settings</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <div class="card-header"><h3>Change Password</h3></div>
+            <div class="card-body">
+              <div class="form-group"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
+              <div class="form-group"><label>New Password</label><input type="password" placeholder="Minimum 8 characters"></div>
+              <div class="form-group"><label>Confirm New Password</label><input type="password" placeholder="Re-enter new password"></div>
+              <button class="btn btn-saffron">Update Password</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Update Contact Details</h3></div>
+            <div class="card-body">
+              <div class="form-group"><label>Contact Email</label><input type="email" value="principal@nmit.ac.in"></div>
+              <div class="form-group"><label>Mobile Number</label><input value="+91-80-23604020"></div>
+              <div class="form-group"><label>Principal Name</label><input value="Dr. Sunanda Rajan"></div>
+              <button class="btn btn-saffron">Save Changes</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Alert Preferences</h3></div>
+            <div class="card-body">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:13px">Email Alerts</span><label style="cursor:pointer"><input type="checkbox" checked> Enable</label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:13px">SMS Alerts</span><label style="cursor:pointer"><input type="checkbox" checked> Enable</label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:13px">Document Expiry Reminders</span><label style="cursor:pointer"><input type="checkbox" checked> Enable</label></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px">AI Flag Notifications</span><label style="cursor:pointer"><input type="checkbox" checked> Enable</label></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Add Admin Users</h3></div>
+            <div class="card-body">
+              <div class="form-group"><label>Admin Email</label><input type="email" placeholder="admin@nmit.ac.in"></div>
+              <div class="form-group"><label>Role</label><select><option>Document Manager</option><option>Viewer</option><option>Sub-Admin</option></select></div>
+              <button class="btn btn-saffron">+ Add Admin</button>
+              <div style="margin-top:16px;font-size:12px;color:var(--gray-500)">Current Admins: 2 users</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= AUTHORITY DASHBOARD ======= -->
+      <div class="page" id="page-auth-dashboard">
+        <div class="page-header">
+          <div class="breadcrumb">Authority Dashboard</div>
+          <h2>Authority Dashboard</h2>
+          <p>South Zone Review — Rajesh Kumar IAS, Senior Reviewer</p>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(6,1fr)">
+          <div class="stat-card blue"><div class="sc-label">Assigned</div><div class="sc-value">142</div><div class="sc-icon">🏛️</div></div>
+          <div class="stat-card amber"><div class="sc-label">Pending</div><div class="sc-value">38</div><div class="sc-icon">⏳</div></div>
+          <div class="stat-card red"><div class="sc-label">AI Flagged</div><div class="sc-value">12</div><div class="sc-icon">🚩</div></div>
+          <div class="stat-card green"><div class="sc-label">Approved</div><div class="sc-value">84</div><div class="sc-icon">✅</div></div>
+          <div class="stat-card red"><div class="sc-label">Rejected</div><div class="sc-value">20</div><div class="sc-icon">❌</div></div>
+          <div class="stat-card gold"><div class="sc-label">Avg Risk</div><div class="sc-value">58</div><div class="sc-icon">📊</div></div>
+        </div>
+        <div class="charts-grid">
+          <div class="card">
+            <div class="card-header"><h3>Approval vs Rejection Trend</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="authTrendChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Risk Distribution — Institutions</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="riskDistChart"></canvas></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>High-Priority Institutions (AI Flagged)</h3><span class="badge badge-flagged">12 High Risk</span></div>
+          <div class="card-body-sm">
+            <table class="data-table">
+              <thead><tr><th>Institution</th><th>State</th><th>Programs</th><th>AI Risk Score</th><th>Primary Flag</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><strong>GEC Thrissur</strong><br><small style="color:var(--gray-500)">ID: 1-9821374650</small></td><td>Kerala</td><td>4</td><td><span class="badge badge-high">82 / High</span></td><td>Faculty Shortage</td><td><button class="btn btn-sm btn-navy" onclick="navTo('inst-review')">Review</button></td></tr>
+                <tr><td><strong>JNTU Kakinada Campus</strong><br><small style="color:var(--gray-500)">ID: 1-7834629012</small></td><td>Andhra Pradesh</td><td>6</td><td><span class="badge badge-high">78 / High</span></td><td>Infrastructure Deficit</td><td><button class="btn btn-sm btn-navy" onclick="navTo('inst-review')">Review</button></td></tr>
+                <tr><td><strong>Madurai Tech Institute</strong><br><small style="color:var(--gray-500)">ID: 1-6547892301</small></td><td>Tamil Nadu</td><td>3</td><td><span class="badge badge-medium">64 / Medium</span></td><td>Expired Certs</td><td><button class="btn btn-sm btn-navy" onclick="navTo('inst-review')">Review</button></td></tr>
+                <tr><td><strong>NMIT Bengaluru</strong><br><small style="color:var(--gray-500)">ID: 1-4721839540</small></td><td>Karnataka</td><td>8</td><td><span class="badge badge-medium">64 / Medium</span></td><td>Ratio Mismatch</td><td><button class="btn btn-sm btn-navy" onclick="navTo('inst-review')">Review</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= INSTITUTION REVIEW (Authority) ======= -->
+      <div class="page" id="page-inst-review">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Institution Review</span></div>
+          <h2>Institution Review</h2>
+          <p>Review complete institution profile, documents and AI compliance flags</p>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box"><input placeholder="🔍 Search institution by name or AICTE ID..."></div>
+          <div class="filter-select"><select><option>All States</option><option>Karnataka</option><option>Kerala</option><option>Tamil Nadu</option><option>Andhra Pradesh</option></select></div>
+          <div class="filter-select"><select><option>All Risk Levels</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header" style="background:#FFF5EE;border-left:4px solid var(--saffron)">
+            <div>
+              <h3>NMIT, Bengaluru — Review Panel</h3>
+              <div style="font-size:12px;color:var(--gray-500);margin-top:2px">AICTE ID: 1-4721839540 | Karnataka | Engineering / Autonomous</div>
+            </div>
+            <span class="badge badge-medium">64 / 100 — Medium Risk</span>
+          </div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px">
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">Total Programs</div><div style="font-weight:600">8 Programs</div></div>
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">Faculty Count</div><div style="font-weight:600;color:var(--amber)">64 (Required: 72)</div></div>
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">Total Intake</div><div style="font-weight:600">780 Students</div></div>
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">Documents Uploaded</div><div style="font-weight:600;color:var(--amber)">6 / 9</div></div>
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">AI Flags</div><div style="font-weight:600;color:var(--red-flag)">3 Active Flags</div></div>
+              <div><div class="info-label" style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray-500);margin-bottom:4px">Previous Approval</div><div style="font-weight:600;color:var(--green-india)">2023-24 Approved</div></div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <button class="btn btn-green" onclick="showAlert('Application approved and institution notified.')">✅ Approve Application</button>
+              <button class="btn btn-saffron" onclick="openModal('raiseQuery')">❓ Raise Query</button>
+              <button class="btn" style="background:var(--amber);color:white" onclick="openModal('markDeficiency')">⚠️ Mark Deficiency</button>
+              <button class="btn" style="background:var(--red-flag);color:white" onclick="showAlert('Application rejected. Deficiency letter will be generated.')">❌ Reject Application</button>
+              <button class="btn btn-navy" onclick="showAlert('Application escalated to Regional Officer.')">🔼 Escalate</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>All Applications Queue</h3></div>
+          <div class="card-body-sm">
+            <table class="data-table">
+              <thead><tr><th>Institution</th><th>State</th><th>Applied Programs</th><th>Risk Score</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>NMIT Bengaluru</td><td>KA</td><td>8</td><td><span class="badge badge-medium">64</span></td><td><span class="badge badge-pending">Under Review</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+                <tr><td>GEC Thrissur</td><td>KL</td><td>4</td><td><span class="badge badge-high">82</span></td><td><span class="badge badge-flagged">AI Flagged</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+                <tr><td>SRM Chennai</td><td>TN</td><td>12</td><td><span class="badge badge-low">28</span></td><td><span class="badge badge-approved">Approved</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+                <tr><td>JNTU Kakinada</td><td>AP</td><td>6</td><td><span class="badge badge-high">78</span></td><td><span class="badge badge-flagged">AI Flagged</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+                <tr><td>Osmania University</td><td>TS</td><td>9</td><td><span class="badge badge-low">35</span></td><td><span class="badge badge-approved">Approved</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+                <tr><td>GCT Coimbatore</td><td>TN</td><td>5</td><td><span class="badge badge-medium">56</span></td><td><span class="badge badge-pending">Under Review</span></td><td><button class="btn btn-sm btn-navy">Open</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= AI RISK ANALYSIS (Authority) ======= -->
+      <div class="page" id="page-auth-ai-risk">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>AI Risk Analysis</span></div>
+          <h2>AI Risk & Compliance Analysis</h2>
+          <p>AI-generated risk scores and deficiency alerts across all assigned institutions</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card red"><div class="sc-label">High Risk Institutions</div><div class="sc-value">12</div><div class="sc-sub">Score &gt;70</div></div>
+          <div class="stat-card amber"><div class="sc-label">Medium Risk</div><div class="sc-value">31</div><div class="sc-sub">Score 40-70</div></div>
+          <div class="stat-card green"><div class="sc-label">Low Risk</div><div class="sc-value">99</div><div class="sc-sub">Score &lt;40</div></div>
+          <div class="stat-card blue"><div class="sc-label">Faculty Shortage Alerts</div><div class="sc-value">18</div></div>
+          <div class="stat-card gold"><div class="sc-label">Expired Certs</div><div class="sc-value">7</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>AI Risk Flags — Detailed View</h3></div>
+          <div class="card-body-sm">
+            <table class="data-table">
+              <thead><tr><th>Institution</th><th>Faculty Shortage</th><th>Infra Deficit</th><th>Faculty Drop</th><th>Intake Mismatch</th><th>Dup. Faculty</th><th>Expired Cert</th><th>Risk</th></tr></thead>
+              <tbody>
+                <tr><td>GEC Thrissur</td><td>❌ Yes</td><td>❌ Yes</td><td>✅ No</td><td>❌ Yes</td><td>✅ No</td><td>✅ No</td><td><span class="badge badge-high">High</span></td></tr>
+                <tr><td>NMIT Bengaluru</td><td>❌ Yes</td><td>✅ No</td><td>✅ No</td><td>⚠️ Minor</td><td>✅ No</td><td>❌ Yes</td><td><span class="badge badge-medium">Medium</span></td></tr>
+                <tr><td>JNTU Kakinada</td><td>✅ No</td><td>❌ Yes</td><td>❌ Yes</td><td>❌ Yes</td><td>⚠️ Suspected</td><td>✅ No</td><td><span class="badge badge-high">High</span></td></tr>
+                <tr><td>GCT Coimbatore</td><td>⚠️ Minor</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td>⚠️ Expiring</td><td><span class="badge badge-medium">Medium</span></td></tr>
+                <tr><td>SRM Chennai</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td>✅ No</td><td><span class="badge badge-low">Low</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= DEFICIENCY MANAGEMENT ======= -->
+      <div class="page" id="page-deficiency">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Deficiency Management</span></div>
+          <h2>Deficiency Management</h2>
+          <p>Generate, track and manage deficiency letters for institutions</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card red"><div class="sc-label">Active Deficiencies</div><div class="sc-value">16</div></div>
+          <div class="stat-card amber"><div class="sc-label">Awaiting Response</div><div class="sc-value">9</div></div>
+          <div class="stat-card green"><div class="sc-label">Resolved</div><div class="sc-value">42</div></div>
+          <div class="stat-card blue"><div class="sc-label">Overdue</div><div class="sc-value">4</div></div>
+        </div>
+        <div class="deficiency-card">
+          <h4>🔴 B.Pharm — NMIT Bengaluru (Critical)</h4>
+          <p>Missing: Fire Safety Certificate, Lab Equipment List. Deadline: 15 Feb 2025. Response: Not Submitted.</p>
+          <div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-sm btn-saffron">Send Reminder</button><button class="btn btn-sm btn-navy">View Submission</button></div>
+        </div>
+        <div class="deficiency-card">
+          <h4>🔴 Infrastructure Adequacy — GEC Thrissur (Critical)</h4>
+          <p>Lab space per student below norm (12.4 sqft vs required 15 sqft). 3D model and drawings requested. Deadline: 20 Feb 2025.</p>
+          <div style="display:flex;gap:10px;margin-top:10px"><button class="btn btn-sm btn-saffron">Send Reminder</button><button class="btn btn-sm btn-navy">Extend Deadline</button></div>
+        </div>
+        <div style="background:#F0FFF4;border:1px solid #B2DFDB;border-radius:6px;padding:16px;margin-bottom:12px">
+          <h4 style="color:var(--green-india)">✅ Faculty List — JNTU Kakinada (Resolved)</h4>
+          <p style="font-size:12px;color:var(--gray-700);margin-top:6px">Faculty qualifications resubmitted and verified. Resolved on 12 Jan 2025.</p>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <div class="card-header"><h3>Generate New Deficiency Letter</h3></div>
+          <div class="card-body">
+            <div class="section-form">
+              <div class="form-group"><label>Institution</label><select><option>NMIT Bengaluru</option><option>GEC Thrissur</option><option>JNTU Kakinada</option></select></div>
+              <div class="form-group"><label>Program</label><select><option>B.Pharm</option><option>MBA</option><option>B.E. ECE</option></select></div>
+              <div class="form-group full"><label>Deficiency Issues</label><select multiple style="height:80px"><option>Faculty Shortage</option><option>Infrastructure Deficit</option><option>Expired Certificate</option><option>Missing Documents</option><option>Faculty Qualification</option></select></div>
+              <div class="form-group full"><label>Custom Remarks</label><textarea style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:4px;font-family:'Noto Sans';font-size:13px;height:80px" placeholder="Enter additional remarks..."></textarea></div>
+              <div class="form-group"><label>Response Deadline</label><input type="date" value="2025-02-28"></div>
+            </div>
+            <button class="btn btn-saffron">Generate & Send Letter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= AUTH ANALYTICS ======= -->
+      <div class="page" id="page-auth-analytics">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Analytics & Monitoring</span></div>
+          <h2>Analytics & Monitoring</h2>
+          <p>Region-wide compliance statistics and performance indicators</p>
+        </div>
+        <div class="charts-grid">
+          <div class="card">
+            <div class="card-header"><h3>Region-wise Approval Rate</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="regionChart"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Common Deficiency Patterns</h3></div>
+            <div class="card-body"><div class="chart-container"><canvas id="deficiencyChart"></canvas></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Institution Risk Heatmap — South Zone</h3></div>
+          <div class="card-body">
+            <div style="margin-bottom:12px;font-size:13px;color:var(--gray-500)">District-wise institution risk distribution (darker = higher risk)</div>
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <div class="card-header"><h3>Application Processing Time Analysis</h3></div>
+          <div class="card-body"><div class="chart-container"><canvas id="processingChart"></canvas></div></div>
+        </div>
+      </div>
+
+      <!-- ======= AUDIT ======= -->
+      <div class="page" id="page-audit">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Audit & History</span></div>
+          <h2>Audit & History Tracking</h2>
+          <p>Complete audit trail of all actions, approvals and deficiencies</p>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Audit Log</h3></div>
+          <div class="card-body-sm">
+            <table class="data-table">
+              <thead><tr><th>Timestamp</th><th>Action</th><th>Institution</th><th>Performed By</th><th>Details</th></tr></thead>
+              <tbody>
+                <tr><td>20 Jan 2025, 11:42</td><td><span class="badge badge-approved">Approved</span></td><td>NMIT Bengaluru — B.E. CSE</td><td>Rajesh Kumar</td><td>Intake 120 approved</td></tr>
+                <tr><td>18 Jan 2025, 14:22</td><td><span class="badge badge-flagged">Deficiency</span></td><td>NMIT Bengaluru — B.Pharm</td><td>Rajesh Kumar</td><td>Fire Safety Cert missing</td></tr>
+                <tr><td>15 Jan 2025, 09:10</td><td><span class="badge badge-review">AI Flag</span></td><td>GEC Thrissur</td><td>AI System</td><td>Faculty ratio 1:20 detected</td></tr>
+                <tr><td>12 Jan 2025, 16:30</td><td><span class="badge badge-approved">Resolved</span></td><td>JNTU Kakinada</td><td>Rajesh Kumar</td><td>Faculty list verified</td></tr>
+                <tr><td>10 Jan 2025, 10:00</td><td><span class="badge badge-rejected">Rejected</span></td><td>Small Institute XYZ</td><td>Priya Sharma</td><td>Insufficient land documents</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= REPORTS ======= -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Reports & Export</span></div>
+          <h2>Reports & Export</h2>
+          <p>Generate and download comprehensive compliance and performance reports</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+          <div class="card" style="text-align:center">
+            <div class="card-body">
+              <div style="font-size:40px;margin-bottom:12px">📋</div>
+              <h3 style="font-size:15px">Institution Compliance Report</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin:8px 0">Full compliance status of all assigned institutions</p>
+              <button class="btn btn-saffron btn-sm" onclick="showAlert('Generating PDF report...')">Export PDF</button>&nbsp;
+              <button class="btn btn-navy btn-sm" onclick="showAlert('Generating Excel...')">Export Excel</button>
+            </div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="card-body">
+              <div style="font-size:40px;margin-bottom:12px">🤖</div>
+              <h3 style="font-size:15px">AI Risk Assessment Report</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin:8px 0">AI-generated risk scores and flag analysis</p>
+              <button class="btn btn-saffron btn-sm" onclick="showAlert('Generating PDF report...')">Export PDF</button>&nbsp;
+              <button class="btn btn-navy btn-sm" onclick="showAlert('Generating Excel...')">Export Excel</button>
+            </div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="card-body">
+              <div style="font-size:40px;margin-bottom:12px">🗺️</div>
+              <h3 style="font-size:15px">Region Performance Report</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin:8px 0">State and district level performance analytics</p>
+              <button class="btn btn-saffron btn-sm" onclick="showAlert('Generating PDF report...')">Export PDF</button>&nbsp;
+              <button class="btn btn-navy btn-sm" onclick="showAlert('Generating CSV...')">Export CSV</button>
+            </div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="card-body">
+              <div style="font-size:40px;margin-bottom:12px">📅</div>
+              <h3 style="font-size:15px">Yearly Approval Statistics</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin:8px 0">Year-on-year approval and rejection data</p>
+              <button class="btn btn-saffron btn-sm" onclick="showAlert('Generating PDF report...')">Export PDF</button>&nbsp;
+              <button class="btn btn-navy btn-sm" onclick="showAlert('Generating Excel...')">Export Excel</button>
+            </div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="card-body">
+              <div style="font-size:40px;margin-bottom:12px">🎯</div>
+              <h3 style="font-size:15px">AI Accuracy Evaluation</h3>
+              <p style="font-size:12px;color:var(--gray-500);margin:8px 0">True positive/negative rate of AI risk predictions</p>
+              <button class="btn btn-saffron btn-sm" onclick="showAlert('Generating PDF report...')">Export PDF</button>&nbsp;
+              <button class="btn btn-navy btn-sm" onclick="showAlert('Generating Excel...')">Export Excel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= AUTH NOTIFICATIONS ======= -->
+      <div class="page" id="page-auth-notifications">
+        <div class="page-header">
+          <div class="breadcrumb">Authority → <span>Notifications</span></div>
+          <h2>Notifications</h2>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Notifications</h3><span class="badge badge-flagged">5 Unread</span></div>
+          <div class="card-body">
+            <div class="notif-item"><div class="notif-icon danger">🚨</div><div><div class="notif-title">New High-Risk Application — GEC Thrissur</div><div class="notif-desc">AI has flagged GEC Thrissur with risk score 82. Faculty shortage and infrastructure deficit detected. Immediate review required.</div><div class="notif-time">20 Jan 2025, 09:00 AM</div></div></div>
+            <div class="notif-item"><div class="notif-icon warning">⏰</div><div><div class="notif-title">Deadline Reminder — NMIT Bengaluru B.Pharm</div><div class="notif-desc">Response deadline for NMIT deficiency letter is 15 Feb 2025. No response received yet. Consider escalation.</div><div class="notif-time">19 Jan 2025, 03:00 PM</div></div></div>
+            <div class="notif-item"><div class="notif-icon info">🔼</div><div><div class="notif-title">Escalation Received — JNTU Kakinada</div><div class="notif-desc">Application escalated from Reviewer Priya Sharma. Senior review required for JNTU Kakinada faculty drop anomaly.</div><div class="notif-time">18 Jan 2025, 11:30 AM</div></div></div>
+            <div class="notif-item"><div class="notif-icon info">📢</div><div><div class="notif-title">New Application Submitted — 3 Institutions</div><div class="notif-desc">3 new applications submitted: VIT Vellore (AY 25-26), Amrita Bangalore (intake revision), LBS College Thiruvananthapuram.</div><div class="notif-time">17 Jan 2025, 08:00 AM</div></div></div>
+            <div class="notif-item"><div class="notif-icon warning">📋</div><div><div class="notif-title">Policy Update — AICTE Norms 2025</div><div class="notif-desc">Updated faculty qualification and infrastructure norms released. All reviewers must apply new criteria from AY 2025-26.</div><div class="notif-time">05 Jan 2025, 10:00 AM</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end main-content -->
+  </div><!-- end app-body -->
+
+  <div class="gov-footer">
+    <div>© 2025 All India Council for Technical Education | Government of India, Ministry of Education</div>
+    <div>Version 4.2.1 | <a>Terms of Use</a> | <a>Privacy Policy</a> | <a>Accessibility</a></div>
+  </div>
+</div><!-- end app -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-addProgram">
+  <div class="modal">
+    <div class="modal-header"><h3>Add New Program</h3><span class="modal-close" onclick="closeModal('addProgram')">✕</span></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Program Name</label><input placeholder="e.g. B.E. Computer Science & Engineering"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Duration</label><select><option>4 Years</option><option>2 Years</option><option>3 Years</option></select></div>
+        <div class="form-group"><label>Applied Intake</label><input type="number" placeholder="60"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Level</label><select><option>UG</option><option>PG</option><option>Diploma</option></select></div>
+        <div class="form-group"><label>Shift</label><select><option>Full Time</option><option>Part Time</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('addProgram')">Cancel</button><button class="btn btn-saffron" onclick="closeModal('addProgram');showAlert('Program added successfully!')">Submit for Approval</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-raiseQuery">
+  <div class="modal">
+    <div class="modal-header"><h3>Raise Query to Institution</h3><span class="modal-close" onclick="closeModal('raiseQuery')">✕</span></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Query Subject</label><input placeholder="e.g. Faculty qualification clarification"></div>
+      <div class="form-group"><label>Query Details</label><textarea style="width:100%;height:100px;padding:10px;border:1.5px solid var(--border);border-radius:4px;font-family:'Noto Sans'" placeholder="Describe your query..."></textarea></div>
+      <div class="form-group"><label>Response Expected By</label><input type="date" value="2025-02-10"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('raiseQuery')">Cancel</button><button class="btn btn-saffron" onclick="closeModal('raiseQuery');showAlert('Query sent to institution.')">Send Query</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-markDeficiency">
+  <div class="modal">
+    <div class="modal-header"><h3>Mark Deficiency</h3><span class="modal-close" onclick="closeModal('markDeficiency')">✕</span></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Deficiency Type</label>
+        <select><option>Faculty Shortage</option><option>Infrastructure Deficit</option><option>Missing Document</option><option>Expired Certificate</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Remarks</label><textarea style="width:100%;height:80px;padding:10px;border:1.5px solid var(--border);border-radius:4px;font-family:'Noto Sans'" placeholder="Enter deficiency details..."></textarea></div>
+      <div class="form-group"><label>Compliance Deadline</label><input type="date" value="2025-02-28"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('markDeficiency')">Cancel</button><button class="btn btn-saffron" onclick="closeModal('markDeficiency');showAlert('Deficiency letter generated and sent.')">Generate Letter</button></div>
+  </div>
+</div>
+
+<script>
+// ==================== STATE ====================
+let currentRole = 'institution';
+let currentPage = '';
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.style.display = 'none';
+    s.classList.remove('active');
+  });
+  document.getElementById(id).style.display = 'block';
+  document.getElementById(id).classList.add('active');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('app').classList.remove('active');
+  window.scrollTo(0, 0);
+}
+
+function loginAs(role) {
+  currentRole = role;
+  if (role === 'authority') showPage('auth-login');
+  else showPage('login');
+}
+
+function enterApp(role) {
+  currentRole = role;
+  // Hide ALL screens first
+  document.querySelectorAll('.screen').forEach(s => {
+    s.style.display = 'none';
+    s.classList.remove('active');
+  });
+  // Force scroll to top
+  window.scrollTo(0, 0);
+  // Show app
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('app').classList.add('active');
+
+  if (role === 'institution') {
+    document.getElementById('inst-sidebar').style.display = 'block';
+    document.getElementById('auth-sidebar').style.display = 'none';
+    document.getElementById('roleBadge').textContent = 'INSTITUTION';
+    document.getElementById('roleBadge').className = 'role-badge';
+    document.getElementById('userNameTop').textContent = 'NMIT Bengaluru';
+    document.getElementById('userAvatarTop').textContent = 'NM';
+    navTo('inst-dashboard');
+  } else {
+    document.getElementById('inst-sidebar').style.display = 'none';
+    document.getElementById('auth-sidebar').style.display = 'block';
+    document.getElementById('roleBadge').textContent = 'AUTHORITY';
+    document.getElementById('roleBadge').className = 'role-badge authority';
+    document.getElementById('userNameTop').textContent = 'Rajesh Kumar IAS';
+    document.getElementById('userAvatarTop').textContent = 'RK';
+    navTo('auth-dashboard');
+  }
+  setTimeout(initCharts, 200);
+  buildPrograms();
+  buildDocs();
+  buildHeatmap();
+}
+
+function navTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  // Update nav highlights
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + page + "'")) n.classList.add('active');
+  });
+
+  // Init charts if needed
+  if (['inst-dashboard','analytics','auth-dashboard','auth-analytics','auth-ai-risk'].includes(page)) {
+    setTimeout(initCharts, 100);
+  }
+}
+
+function logout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('app').classList.remove('active');
+  // Restore all screens to default hidden state
+  document.querySelectorAll('.screen').forEach(s => {
+    s.style.display = 'none';
+    s.classList.remove('active');
+  });
+  // Show landing
+  document.getElementById('landing').style.display = 'block';
+  document.getElementById('landing').classList.add('active');
+  window.scrollTo(0, 0);
+  // Destroy charts
+  Object.values(chartInstances).forEach(c => { if(c) c.destroy(); });
+  chartInstances = {};
+}
+
+// ==================== CHARTS ====================
+let chartInstances = {};
+const NAVY = '#0a2240', SAFFRON = '#FF6B00', GREEN = '#138808', AMBER = '#E8920A', RED = '#D92B3A', GOLD = '#C8A84B';
+
+function makeChart(id, config) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); }
+  const el = document.getElementById(id);
+  if (!el) return;
+  chartInstances[id] = new Chart(el, config);
+}
+
+function initCharts() {
+  const years = ['2019-20','2020-21','2021-22','2022-23','2023-24','2024-25'];
+
+  // Approval Trend
+  makeChart('approvalTrendChart', {
+    type: 'line',
+    data: { labels: years, datasets: [
+      { label: 'Approved', data: [4,4,5,5,6,5], borderColor: GREEN, backgroundColor: 'rgba(19,136,8,0.1)', tension: 0.4, fill: true },
+      { label: 'Rejected', data: [1,2,1,0,1,1], borderColor: RED, backgroundColor: 'rgba(217,43,58,0.1)', tension: 0.4, fill: true }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Program Status Pie
+  makeChart('programStatusChart', {
+    type: 'doughnut',
+    data: { labels: ['Approved','Pending','Rejected'], datasets: [{ data: [5,2,1], backgroundColor: [GREEN, AMBER, RED], borderWidth: 2 }]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Faculty Chart
+  makeChart('facultyChart', {
+    type: 'bar',
+    data: { labels: ['CSE','ECE','ME','CV','MBA','M.Tech','B.Pharm','MCA'],
+      datasets: [
+        { label: 'Available', data: [16,12,9,8,6,4,3,5], backgroundColor: SAFFRON },
+        { label: 'Required', data: [19,13,10,9,8,5,5,6], backgroundColor: 'rgba(10,34,64,0.3)' }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+  });
+
+  // Intake Chart
+  makeChart('intakeChart', {
+    type: 'bar',
+    data: { labels: ['CSE','ECE','ME','MBA','B.Pharm'],
+      datasets: [
+        { label: 'Sanctioned Intake', data: [120,60,60,60,30], backgroundColor: NAVY },
+        { label: 'Actual Enrollment', data: [116,58,52,55,24], backgroundColor: GOLD }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+  });
+
+  // Compliance trend
+  makeChart('compTrendChart', {
+    type: 'line',
+    data: { labels: years, datasets: [{
+      label: 'Compliance Score', data: [72,68,74,70,66,64],
+      borderColor: SAFFRON, backgroundColor: 'rgba(255,107,0,0.1)', tension: 0.4, fill: true
+    }]},
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 50, max: 100 } } }
+  });
+
+  // Faculty Strength
+  makeChart('facultyStrengthChart', {
+    type: 'bar',
+    data: { labels: years, datasets: [
+      { label: 'Faculty Count', data: [78,74,76,72,68,64], backgroundColor: NAVY },
+      { label: 'Required', data: [72,72,72,72,72,72], type: 'line', borderColor: RED, borderDash: [5,5], backgroundColor: 'transparent' }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  // Success Rate
+  makeChart('successRateChart', {
+    type: 'line',
+    data: { labels: years, datasets: [{
+      label: 'Approval Rate (%)', data: [80,67,83,100,86,71],
+      borderColor: GREEN, backgroundColor: 'rgba(19,136,8,0.1)', tension: 0.4, fill: true
+    }]},
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
+  });
+
+  // Benchmark
+  makeChart('benchmarkChart', {
+    type: 'radar',
+    data: { labels: ['Faculty','Infrastructure','Documents','Finance','Compliance'],
+      datasets: [
+        { label: 'NMIT', data: [58,72,67,80,64], borderColor: SAFFRON, backgroundColor: 'rgba(255,107,0,0.2)' },
+        { label: 'State Avg', data: [65,70,75,68,70], borderColor: NAVY, backgroundColor: 'rgba(10,34,64,0.1)' }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 100 } } }
+  });
+
+  // Risk Gauge (doughnut)
+  makeChart('riskGauge', {
+    type: 'doughnut',
+    data: { datasets: [{ data: [64,36], backgroundColor: [AMBER, '#E8ECF2'], borderWidth: 0 }]},
+    options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+  });
+
+  // Authority trend
+  makeChart('authTrendChart', {
+    type: 'bar',
+    data: { labels: years, datasets: [
+      { label: 'Approved', data: [92,85,98,102,95,84], backgroundColor: GREEN },
+      { label: 'Rejected', data: [18,22,15,12,19,20], backgroundColor: RED }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Risk Distribution
+  makeChart('riskDistChart', {
+    type: 'pie',
+    data: { labels: ['Low Risk','Medium Risk','High Risk'], datasets: [{ data: [99,31,12], backgroundColor: [GREEN, AMBER, RED] }]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Region chart
+  makeChart('regionChart', {
+    type: 'bar',
+    data: { labels: ['Karnataka','Kerala','Tamil Nadu','Andhra Pradesh','Telangana'],
+      datasets: [{ label: 'Approval Rate (%)', data: [78,72,82,68,85], backgroundColor: [NAVY, SAFFRON, GREEN, AMBER, GOLD] }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
+  });
+
+  // Deficiency patterns
+  makeChart('deficiencyChart', {
+    type: 'doughnut',
+    data: { labels: ['Faculty Shortage','Infra Deficit','Missing Docs','Expired Certs','Duplicate Faculty'],
+      datasets: [{ data: [34,28,18,12,8], backgroundColor: [RED, AMBER, NAVY, GOLD, SAFFRON] }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+  });
+
+  // Processing time
+  makeChart('processingChart', {
+    type: 'bar',
+    data: { labels: ['Low Risk','Medium Risk','High Risk','Flagged','Escalated'],
+      datasets: [{ label: 'Avg Days to Process', data: [12,24,38,45,52], backgroundColor: [GREEN, AMBER, RED, SAFFRON, NAVY] }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+  });
+}
+
+// ==================== PROGRAMS ====================
+const programs = [
+  { name: 'B.E. Computer Science & Engineering', level: 'UG', intake: 120, status: 'Approved', risk: 'low', icon: '💻' },
+  { name: 'B.E. Electronics & Communication', level: 'UG', intake: 60, status: 'Approved', risk: 'low', icon: '📡' },
+  { name: 'B.E. Mechanical Engineering', level: 'UG', intake: 60, status: 'Approved', risk: 'low', icon: '⚙️' },
+  { name: 'B.E. Civil Engineering', level: 'UG', intake: 60, status: 'Approved', risk: 'low', icon: '🏗️' },
+  { name: 'M.Tech Computer Science', level: 'PG', intake: 18, status: 'Approved', risk: 'low', icon: '🎓' },
+  { name: 'MBA General Management', level: 'PG', intake: 60, status: 'Pending', risk: 'medium', icon: '📊', flag: 'AI Flagged' },
+  { name: 'M.Tech VLSI Design', level: 'PG', intake: 18, status: 'Pending', risk: 'medium', icon: '🔬' },
+  { name: 'B.Pharm', level: 'UG', intake: 30, status: 'Rejected', risk: 'high', icon: '💊', flag: 'Deficiency' }
+];
+
+function buildPrograms() {
+  const container = document.getElementById('programs-list');
+  if (!container) return;
+  container.innerHTML = programs.map(p => `
+    <div class="program-card">
+      <div class="program-icon">${p.icon}</div>
+      <div class="program-info">
+        <div class="program-name">${p.name}</div>
+        <div class="program-meta">${p.level} · Intake: ${p.intake} · AICTE Approved Intake: ${p.intake}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        ${p.flag ? `<span class="badge badge-${p.status === 'Rejected' ? 'rejected' : 'medium'}">${p.flag}</span>` : ''}
+        <span class="badge badge-${p.status.toLowerCase()}">${p.status}</span>
+        <span class="badge badge-${p.risk}">Risk: ${p.risk.charAt(0).toUpperCase()+p.risk.slice(1)}</span>
+        <button class="btn btn-sm btn-navy">Edit</button>
+        <button class="btn btn-sm btn-saffron">Submit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================== DOCUMENTS ====================
+const docs = [
+  { name: 'Faculty List', status: 'uploaded', date: '10 Jan 2025' },
+  { name: 'Infrastructure Details', status: 'uploaded', date: '10 Jan 2025' },
+  { name: 'Lab Equipment List', status: 'missing', date: '' },
+  { name: 'Building Approval', status: 'uploaded', date: '05 Dec 2024' },
+  { name: 'Fire Safety Certificate', status: 'expired', date: 'Exp: 01 Nov 2024' },
+  { name: 'Land Ownership Documents', status: 'uploaded', date: '05 Dec 2024' },
+  { name: 'Financial Statements', status: 'uploaded', date: '15 Oct 2024' },
+  { name: 'Affidavit', status: 'uploaded', date: '15 Oct 2024' },
+  { name: 'Previous Approval Letter', status: 'missing', date: '' }
+];
+
+function buildDocs() {
+  const g = document.getElementById('doc-grid');
+  if (!g) return;
+  g.innerHTML = docs.map(d => `
+    <div class="doc-card ${d.status === 'uploaded' ? 'uploaded' : d.status === 'expired' ? 'expired' : ''}">
+      <div class="doc-icon">${d.status === 'uploaded' ? '📄' : d.status === 'expired' ? '⚠️' : '📋'}</div>
+      <div class="doc-name">${d.name}</div>
+      <div class="doc-status">${d.status === 'uploaded' ? '✅ Uploaded — '+d.date : d.status === 'expired' ? '🔴 EXPIRED — '+d.date : '❌ Not Uploaded'}</div>
+      ${d.status !== 'uploaded' ? '<button class="btn btn-sm btn-saffron" style="margin-top:8px">Upload Now</button>' : '<button class="btn btn-sm" style="margin-top:8px;background:var(--gray-200)">View</button>'}
+    </div>
+  `).join('');
+}
+
+// ==================== HEATMAP ====================
+const districts = ['Bengaluru','Mysuru','Belagavi','Mangaluru','Hubli','Shivamogga','Chennai','Coimbatore','Madurai','Salem','Tiruchirappalli','Vellore','Hyderabad','Warangal','Vijayawada','Visakhapatnam','Tirupati','Kurnool','Kochi','Thiruvananthapuram','Kozhikode','Thrissur'];
+function buildHeatmap() {
+  const h = document.getElementById('heatmap');
+  if (!h) return;
+  const colors = ['#D4EDDA','#A8D8B0','#FFE8B0','#FFD07A','#FFB347','#FF8C38','#FF6B00','#D92B3A'];
+  h.innerHTML = districts.map(d => {
+    const risk = Math.floor(Math.random() * 8);
+    const score = 20 + risk * 10;
+    return `<div class="hm-cell" style="background:${colors[risk]};color:${risk > 4 ? '#fff' : '#333'}" title="${d}: Risk ${score}">${d.substring(0,4)}</div>`;
+  }).join('');
+}
+
+// ==================== MODALS ====================
+function openModal(id) {
+  document.getElementById('modal-' + id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById('modal-' + id).classList.remove('open');
+}
+
+// ==================== ALERTS ====================
+function showAlert(msg) {
+  const div = document.createElement('div');
+  div.style.cssText = 'position:fixed;top:72px;right:20px;background:#138808;color:#fff;padding:14px 20px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:320px';
+  div.textContent = '✅ ' + msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+</script>
+</body>
+</html>
